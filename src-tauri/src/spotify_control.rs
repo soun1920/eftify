@@ -1,5 +1,4 @@
-use log::{debug, error, info, trace, warn};
-use windows::core::*;
+use log::{debug, error, info};
 
 use std::ffi::OsStr;
 use sysinfo::{ProcessRefreshKind, RefreshKind, System};

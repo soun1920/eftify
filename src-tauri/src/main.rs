@@ -4,11 +4,8 @@ use crate::tarkov_log_watcher::TarkovLogWatcher;
 use std::thread;
 use std::time::Duration;
 use tauri::Manager;
-use tauri::{CustomMenuItem, SystemTray, SystemTrayEvent, SystemTrayMenu, SystemTrayMenuItem};
+use tauri::{SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri_plugin_autostart::MacosLauncher;
-use tokio;
-use tokio::runtime::Builder;
-use tokio::time::sleep;
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #[cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command

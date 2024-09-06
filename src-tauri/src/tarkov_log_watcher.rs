@@ -1,9 +1,8 @@
 use crate::spotify_control::SpotifyControls;
 use chrono::{DateTime, Local, NaiveDateTime, Utc};
-use log::{debug, info, trace, warn};
+use log::{debug, info};
 use regex::Regex;
 use std::{
-    env,
     ffi::OsStr,
     fs::OpenOptions,
     io::{self, Read, Seek, SeekFrom},
