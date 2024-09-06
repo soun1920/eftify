@@ -9,15 +9,6 @@ use tauri_plugin_autostart::MacosLauncher;
 // Prevents additional console window on Windows in release, DO NOT REMOVE!!
 #[cfg_attr(not(debug_assertions), windows_subsystem = "windows")]
 // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-
-async fn start_loop() {
-    let mut tarkov_log_watcher = TarkovLogWatcher::new();
-    loop {
-        println!("Watching logs");
-        tarkov_log_watcher.watch_logs();
-        thread::sleep(Duration::from_secs(5));
-    }
-}
 #[tauri::command]
 fn spotify_play() {
     let mut spotify = spotify_control::SpotifyControls::new();
@@ -55,7 +46,6 @@ fn main() {
             tauri::async_runtime::spawn_blocking(move || {
                 let mut tarkov_log_watcher = TarkovLogWatcher::new();
                 loop {
-                    println!("Watching logs");
                     tarkov_log_watcher.watch_logs();
                     thread::sleep(Duration::from_secs(5));
                 }

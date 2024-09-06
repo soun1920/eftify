@@ -246,13 +246,13 @@ impl TarkovLogWatcher {
             return;
         }
         if new_data_app.contains("application|GameStarted") {
-            println!("game started at {} ", dt.format("%H:%M:%S"));
+            info!("game started at {} ", dt.format("%H:%M:%S"));
             self.spotify.pause();
         }
         if new_data_backend
             .contains("escapefromtarkov.com/client/putMetrics, crc: , responseText: .")
         {
-            println!("game ended at {} ", dt.format("%H:%M:%S"));
+            info!("game ended at {} ", dt.format("%H:%M:%S"));
             self.spotify.play();
         }
     }
