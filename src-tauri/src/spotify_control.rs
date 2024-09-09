@@ -4,6 +4,7 @@ use std::ffi::OsStr;
 use sysinfo::{ProcessRefreshKind, RefreshKind, System};
 use windows::Win32::Foundation::{BOOL, HWND, LPARAM, WPARAM};
 use windows::Win32::UI::WindowsAndMessaging::*;
+
 pub struct SpotifyControls {
     spotify_hwnd: HWND,
     system: System,
@@ -51,7 +52,6 @@ impl SpotifyControls {
         };
 
         self.spotify_hwnd = window_data.hwnd_found;
-        println!("{:?}", self.spotify_hwnd);
     }
 
     extern "system" fn enum_windows_proc(hwnd: HWND, lparam: LPARAM) -> BOOL {
@@ -78,7 +78,7 @@ impl SpotifyControls {
 
             if target_pid.contains(&pid) && unsafe { IsWindowVisible(hwnd).as_bool() } {
                 let title_str = String::from_utf16_lossy(&title[..length as usize]);
-                println!(
+                info!(
                     "Found Spotify window with HWND: {:?}, Title: {} PID: {}",
                     hwnd, title_str, pid
                 );
@@ -130,7 +130,7 @@ impl SpotifyControls {
         }
         buf.retain(|&x| x != 0);
         let class_name = String::from_utf16_lossy(&buf);
-        println!("title:{:?} | class name:{:?}", title, class_name);
+        info!("title:{:?} | class name:{:?}", title, class_name);
         title
     }
 }

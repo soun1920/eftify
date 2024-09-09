@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "eftify",
-    "version": "0.1.0"
+    "version": "0.0.1"
   },
   "tauri": {
     "allowlist": {
@@ -20,13 +20,18 @@
         "open": true
       }
     },
-    "windows": [
-      {
-        "title": "eftify",
-        "width": 800,
-        "height": 600
+    "updater": {
+      "active": true,
+      "endpoints": [
+        "https://eftify.soun-tech.net/{{target}}/{{arch}}/{{current_version}}"
+      ],
+      "dialog": true,
+      "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY2ODlERkU2NTNDMDMzNkYKUldSdk04QlQ1dCtKOWgydDRSZGM5bzBrbjhpUklFbTJLTVhKREt4a01sZTE3OEFvVXJiSUs2aGUK",
+      "windows": {
+        "installMode": "passive"
       }
-    ],
+    },
+    "windows": [],
     "systemTray": {
       "iconPath": "./icons/32x32.png"
     },
@@ -34,6 +39,11 @@
       "csp": null
     },
     "bundle": {
+      "windows": {
+        "wix": {
+          "language": ["en-US", "ja-JP"]
+        }
+      },
       "active": true,
       "targets": "all",
       "identifier": "net.soun-tech.eftify",

@@ -184,10 +184,9 @@ impl TarkovLogWatcher {
                     .without_disk_usage(),
             ),
         );
+        if self.check_eft_running(&system) || self.check_spotify_running(&system) {
+            self.spotify.get_spotify_hwnd();
 
-        self.spotify.get_spotify_hwnd();
-
-        if self.check_eft_running(&system) {
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
             let (app_log_name, backend_log_name) = Self::get_log_files(latest_log_path.clone())?;
 
@@ -206,7 +205,14 @@ impl TarkovLogWatcher {
         for _ in s.processes_by_name(eft_process_name) {
             return true;
         }
-        true
+        false
+    }
+    fn check_spotify_running(&self, s: &System) -> bool {
+        let eft_process_name: &OsStr = OsStr::new("EscapeFromTarkov.exe");
+        for _ in s.processes_by_name(eft_process_name) {
+            return true;
+        }
+        false
     }
 
     fn process_log(
@@ -246,13 +252,13 @@ impl TarkovLogWatcher {
             return;
         }
         if new_data_app.contains("application|GameStarted") {
-            println!("game started at {} ", dt.format("%H:%M:%S"));
+            info!("game started at {} ", dt.format("%H:%M:%S"));
             self.spotify.pause();
         }
         if new_data_backend
             .contains("escapefromtarkov.com/client/putMetrics, crc: , responseText: .")
         {
-            println!("game ended at {} ", dt.format("%H:%M:%S"));
+            info!("game ended at {} ", dt.format("%H:%M:%S"));
             self.spotify.play();
         }
     }

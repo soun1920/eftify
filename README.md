@@ -1,7 +1,15 @@
-# Tauri + SvelteKit + TypeScript
-
-This template should help get you started developing with Tauri, SvelteKit and TypeScript in Vite.
-
-## Recommended IDE Setup
-
-[VS Code](https://code.visualstudio.com/) + [Svelte](https://marketplace.visualstudio.com/items?itemName=svelte.svelte-vscode) + [Tauri](https://marketplace.visualstudio.com/items?itemName=tauri-apps.tauri-vscode) + [rust-analyzer](https://marketplace.visualstudio.com/items?itemName=rust-lang.rust-analyzer).
+# EFTify
+## Features
+Simple app that automatically plays/pauses spotify playback when EscapeFromTarkov's Raid starts/ends.
+## Requirements
+ - Installed EscapeFromTarkov
+ - Installed Spotify
+## Installation
+Download the installer [here](https://github.com/soun1920/eftify/releases)
+## Usage
+Just launch the application.
+(When EFTify is launched, EFTify resides in the system tray and no window appears. )
+## Build
+```pnpm tauri build```
+## License
+This project is licensed under the MIT License.
