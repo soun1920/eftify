@@ -12,6 +12,7 @@ tauri-build = { version = "1", features = [] }
 
 [dependencies]
 tauri = { version = "1", features = [
+    "updater",
     "system-tray",
     "dialog-open",
     "shell-open",
@@ -26,6 +27,10 @@ tokio = "1.40.0"
 env_logger = "0.11.5"
 log = "0.4.22"
 tauri-plugin-autostart = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-store = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
+tauri-plugin-theme = "1"
+devtools = "0.3.3"
+tauri-plugin-log = { git = "https://github.com/tauri-apps/plugins-workspace", branch = "v1" }
 
 [dependencies.windows]
 features = ["Win32_Foundation", "Win32_UI_WindowsAndMessaging", "Win32_System"]

@@ -4,6 +4,7 @@ use std::ffi::OsStr;
 use sysinfo::{ProcessRefreshKind, RefreshKind, System};
 use windows::Win32::Foundation::{BOOL, HWND, LPARAM, WPARAM};
 use windows::Win32::UI::WindowsAndMessaging::*;
+
 pub struct SpotifyControls {
     spotify_hwnd: HWND,
     system: System,

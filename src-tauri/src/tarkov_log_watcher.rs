@@ -176,18 +176,19 @@ impl TarkovLogWatcher {
 
     pub fn watch_logs(&mut self) -> std::io::Result<()> {
         let mut system = System::new();
-        system.refresh_specifics(
-            RefreshKind::new().with_processes(
-                ProcessRefreshKind::everything()
-                    .without_cpu()
-                    .without_memory()
-                    .without_disk_usage(),
-            ),
-        );
 
-        self.spotify.get_spotify_hwnd();
+        if self.check_eft_running(&system) || self.check_spotify_running(&system) {
+            system.refresh_specifics(
+                RefreshKind::new().with_processes(
+                    ProcessRefreshKind::everything()
+                        .without_cpu()
+                        .without_memory()
+                        .without_disk_usage(),
+                ),
+            );
 
-        if self.check_eft_running(&system) {
+            self.spotify.get_spotify_hwnd();
+
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
             let (app_log_name, backend_log_name) = Self::get_log_files(latest_log_path.clone())?;
 
@@ -206,7 +207,14 @@ impl TarkovLogWatcher {
         for _ in s.processes_by_name(eft_process_name) {
             return true;
         }
-        true
+        false
+    }
+    fn check_spotify_running(&self, s: &System) -> bool {
+        let eft_process_name: &OsStr = OsStr::new("EscapeFromTarkov.exe");
+        for _ in s.processes_by_name(eft_process_name) {
+            return true;
+        }
+        false
     }
 
     fn process_log(
