@@ -7,7 +7,7 @@ env:
 on:
   push:
     branches:
-      - master # 簡単のため main に変更
+      - master
 
 jobs:
   publish-tauri:
@@ -25,10 +25,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: 16
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4.0.0          
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
       - name: install frontend dependencies
-        run: npm install # change this to npm or pnpm depending on which one you use
+        run: pnpm install # change this to npm or pnpm depending on which one you use
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
