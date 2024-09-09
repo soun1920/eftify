@@ -6,8 +6,8 @@ mod spotify_control;
 mod tarkov_log_watcher;
 use crate::tarkov_log_watcher::TarkovLogWatcher;
 use log::{debug, error, info, LevelFilter};
-use std::thread;
 use std::time::Duration;
+use std::{env, thread};
 use tauri::{Manager, WindowBuilder, WindowUrl};
 use tauri::{SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri_plugin_autostart::MacosLauncher;
@@ -34,7 +34,7 @@ fn create_new_window(app: tauri::AppHandle, label: String, title: String) -> Opt
         WindowUrl::App("index.html".into()), // ロードするページ
     )
     .title(title) // ウィンドウのタイトル
-    .visible(false)
+    .visible(true)
     .resizable(true) // サイズ変更可能
     .minimizable(false)
     .maximizable(false)
@@ -58,6 +58,8 @@ fn main() {
     let tray_menu = SystemTrayMenu::new().add_item(settings).add_item(quit);
     let system_tray = SystemTray::new().with_menu(tray_menu);
     let mut ctx = tauri::generate_context!();
+    env::set_var("RUST_LOG", "info");
+    env_logger::init();
 
     let mut builder = tauri::Builder::default();
 
@@ -95,7 +97,7 @@ fn main() {
                 let mut tarkov_log_watcher = TarkovLogWatcher::new();
                 loop {
                     let _ = tarkov_log_watcher.watch_logs();
-                    thread::sleep(Duration::from_secs(5));
+                    thread::sleep(Duration::from_secs(3));
                 }
             });
             // ..

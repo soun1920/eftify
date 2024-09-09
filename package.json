@@ -20,7 +20,7 @@
     "tauri-plugin-log-api": "github:tauri-apps/tauri-plugin-log#v1"
   },
   "devDependencies": {
-    "@sveltejs/adapter-static": "^3.0.1",
+    "@sveltejs/adapter-static": "^3.0.4",
     "@sveltejs/kit": "^2.0.0",
     "@sveltejs/vite-plugin-svelte": "^3.0.0",
     "@tailwindcss/typography": "^0.5.14",

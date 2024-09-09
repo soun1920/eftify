@@ -176,17 +176,15 @@ impl TarkovLogWatcher {
 
     pub fn watch_logs(&mut self) -> std::io::Result<()> {
         let mut system = System::new();
-
+        system.refresh_specifics(
+            RefreshKind::new().with_processes(
+                ProcessRefreshKind::everything()
+                    .without_cpu()
+                    .without_memory()
+                    .without_disk_usage(),
+            ),
+        );
         if self.check_eft_running(&system) || self.check_spotify_running(&system) {
-            system.refresh_specifics(
-                RefreshKind::new().with_processes(
-                    ProcessRefreshKind::everything()
-                        .without_cpu()
-                        .without_memory()
-                        .without_disk_usage(),
-                ),
-            );
-
             self.spotify.get_spotify_hwnd();
 
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
