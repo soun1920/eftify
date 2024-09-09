@@ -21,16 +21,21 @@ jobs:
     runs-on: ${{ matrix.platform }}
     steps:
       - uses: actions/checkout@v3
-      - name: setup node
-        uses: actions/setup-node@v3
-        with:
-          node-version: 16
       - name: Setup pnpm
-        uses: pnpm/action-setup@v4.0.0          
+  # You may pin to the exact commit or the version.
+  # uses: pnpm/action-setup@fe02b34f77f8bc703788d5817da081398fad5dd2
+      - uses: pnpm/action-setup@v4.0.0
+      - name: Install pnpm
+        with:
+          # Version of pnpm to install
+          version: 7.26.3
+          # Where to store pnpm files
+          run_install: true
+          # File path to the package.json to read "packageManager" configuration
+          package_json_file: true
+          
       - name: install Rust stable
         uses: dtolnay/rust-toolchain@stable
-      - name: install frontend dependencies
-        run: pnpm install # change this to npm or pnpm depending on which one you use
       - uses: tauri-apps/tauri-action@v0
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
