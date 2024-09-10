@@ -2,8 +2,7 @@
 ## Features
 Simple app that automatically plays/pauses spotify playback when EscapeFromTarkov's Raid starts/ends.
 ## Requirements
- - Installed EscapeFromTarkov
- - Installed Spotify
+Spotify and EscapeFromTarkov must be installed on your system
 ## Installation
 Download the installer [here](https://github.com/soun1920/eftify/releases)
 ## Usage
