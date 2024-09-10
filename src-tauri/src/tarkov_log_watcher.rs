@@ -184,7 +184,8 @@ impl TarkovLogWatcher {
                     .without_disk_usage(),
             ),
         );
-        if self.check_eft_running(&system) || self.check_spotify_running(&system) {
+        let is_eft_running = self.check_eft_running(&system);
+        if is_eft_running || self.check_spotify_running(&system) {
             self.spotify.get_spotify_hwnd();
 
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
@@ -197,9 +198,18 @@ impl TarkovLogWatcher {
                 backend_log_name,
             );
         }
+        if !is_eft_running {
+            self.init_bytes_read();
+        }
+
         Ok(())
     }
-
+    fn init_bytes_read(&self) {
+        let mut app_log_bytes_read = self.app_log_bytes_read.lock().unwrap();
+        *app_log_bytes_read = 0;
+        let mut backend_log_bytes_read = self.backend_log_bytes_read.lock().unwrap();
+        *backend_log_bytes_read = 0;
+    }
     fn check_eft_running(&self, s: &System) -> bool {
         let eft_process_name: &OsStr = OsStr::new("EscapeFromTarkov.exe");
         for _ in s.processes_by_name(eft_process_name) {
