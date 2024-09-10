@@ -16,7 +16,7 @@
     "updater": {
       "active": true,
       "endpoints": [
-        "https://github.com/soun1920/eftify/releases/download/{{current_version}}/latest.json"
+        "https://github.com/soun1920/eftify/releases/download/v{{current_version}}/latest.json"
       ],
       "dialog": true,
       "pubkey": "dW50cnVzdGVkIGNvbW1lbnQ6IG1pbmlzaWduIHB1YmxpYyBrZXk6IEY2ODlERkU2NTNDMDMzNkYKUldSdk04QlQ1dCtKOWgydDRSZGM5bzBrbjhpUklFbTJLTVhKREt4a01sZTE3OEFvVXJiSUs2aGUK",
