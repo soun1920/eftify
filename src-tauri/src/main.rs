@@ -61,7 +61,7 @@ fn main() {
     env::set_var("RUST_LOG", "info");
     env_logger::init();
 
-    let mut builder = tauri::Builder::default();
+    let builder = tauri::Builder::default();
 
     builder
         .plugin(tauri_plugin_autostart::init(
