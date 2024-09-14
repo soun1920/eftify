@@ -23,7 +23,7 @@ pub(crate) struct TarkovLogWatcher {
     app_log_bytes_read: Arc<Mutex<u64>>,
     backend_log_bytes_read: Arc<Mutex<u64>>,
     spotify: SpotifyControls,
-    delay: time::Duration,
+    eft_exit_flag: bool,
 }
 
 impl TarkovLogWatcher {
@@ -34,7 +34,7 @@ impl TarkovLogWatcher {
         let app_log_bytes_read: Arc<Mutex<u64>> = Arc::new(Mutex::new(0));
         let backend_log_bytes_read: Arc<Mutex<u64>> = Arc::new(Mutex::new(0));
         let spotify = SpotifyControls::new();
-        let delay = time::Duration::from_secs(5);
+        let eft_exit_flag = false;
 
         TarkovLogWatcher {
             eft_logs_location,
@@ -45,7 +45,7 @@ impl TarkovLogWatcher {
             app_log_bytes_read,
             backend_log_bytes_read,
             spotify,
-            delay,
+            eft_exit_flag,
         }
     }
     fn get_log_path() -> String {
@@ -186,20 +186,35 @@ impl TarkovLogWatcher {
         );
         let is_eft_running = self.check_eft_running(&system);
         if is_eft_running || self.check_spotify_running(&system) {
+            info!("EFT is running");
             self.spotify.get_spotify_hwnd();
 
+            if self.eft_exit_flag {
+                info!("eft exit flag is true");
+                self.init_bytes_read();
+                self.eft_exit_flag = false;
+                thread::sleep(time::Duration::from_secs(15));
+            }
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
             let (app_log_name, backend_log_name) = Self::get_log_files(latest_log_path.clone())?;
-
+            info!("latest log path: {:?}", latest_log_path);
             self.process_log(
                 latest_log_path.clone(),
                 app_log_name,
                 latest_log_path,
                 backend_log_name,
             );
+            info!(
+                "app bytes read {}",
+                *self.app_log_bytes_read.lock().unwrap()
+            );
+            info!(
+                "backend bytes read {}",
+                *self.backend_log_bytes_read.lock().unwrap()
+            );
         }
         if !is_eft_running {
-            self.init_bytes_read();
+            self.eft_exit_flag = true;
         }
 
         Ok(())
@@ -262,13 +277,13 @@ impl TarkovLogWatcher {
             return;
         }
         if new_data_app.contains("application|GameStarted") {
-            info!("game started at {} ", dt.format("%H:%M:%S"));
+            info!("spotify paused");
             self.spotify.pause();
         }
         if new_data_backend
             .contains("escapefromtarkov.com/client/putMetrics, crc: , responseText: .")
         {
-            info!("game ended at {} ", dt.format("%H:%M:%S"));
+            info!("spotify playing");
             self.spotify.play();
         }
     }
