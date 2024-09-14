@@ -40,7 +40,7 @@ impl SpotifyControls {
         for p in s.processes_by_name(spotify_process_name) {
             spotify_pids.push(p.pid().as_u32());
         }
-        info!("Spotify PIDs: {:?}", spotify_pids);
+        debug!("Spotify PIDs: {:?}", spotify_pids);
         let mut window_data = WindowData {
             target_pid: spotify_pids,
             hwnd_found: self.spotify_hwnd,
@@ -78,7 +78,7 @@ impl SpotifyControls {
 
             if target_pid.contains(&pid) && unsafe { IsWindowVisible(hwnd).as_bool() } {
                 let title_str = String::from_utf16_lossy(&title[..length as usize]);
-                info!(
+                debug!(
                     "Found Spotify window with HWND: {:?}, Title: {} PID: {}",
                     hwnd, title_str, pid
                 );

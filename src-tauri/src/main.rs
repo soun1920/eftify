@@ -5,9 +5,14 @@
 mod spotify_control;
 mod tarkov_log_watcher;
 use crate::tarkov_log_watcher::TarkovLogWatcher;
+use chrono::Local;
 use log::{debug, error, info, LevelFilter};
+use simplelog::{Config, WriteLogger};
+use std::fs::File;
+use std::path::PathBuf;
 use std::time::Duration;
 use std::{env, thread};
+use tauri::api::path::app_data_dir;
 use tauri::{Manager, WindowBuilder, WindowUrl};
 use tauri::{SystemTray, SystemTrayEvent, SystemTrayMenu};
 use tauri_plugin_autostart::MacosLauncher;
@@ -52,14 +57,13 @@ fn create_new_window(app: tauri::AppHandle, label: String, title: String) -> Opt
         }
     }
 }
+
 fn main() {
     let settings = tauri::CustomMenuItem::new("settings".to_string(), "EFTify  Settings");
     let quit = tauri::CustomMenuItem::new("quit".to_string(), "Quit");
     let tray_menu = SystemTrayMenu::new().add_item(settings).add_item(quit);
     let system_tray = SystemTray::new().with_menu(tray_menu);
     let mut ctx = tauri::generate_context!();
-    env::set_var("RUST_LOG", "info");
-    env_logger::init();
 
     let builder = tauri::Builder::default();
 
@@ -69,6 +73,12 @@ fn main() {
             Some(vec![]),
         ))
         .plugin(tauri_plugin_theme::init(ctx.config_mut()))
+        .plugin(
+            tauri_plugin_log::Builder::default()
+                .targets([LogTarget::LogDir, LogTarget::Stdout, LogTarget::Webview])
+                .level(LevelFilter::Info)
+                .build(),
+        )
         .system_tray(system_tray)
         .on_system_tray_event(|app, event| match event {
             SystemTrayEvent::MenuItemClick { id, .. } => match id.as_str() {
@@ -92,7 +102,7 @@ fn main() {
             },
             _ => {}
         })
-        .setup(|_| {
+        .setup(|app| {
             tauri::async_runtime::spawn_blocking(move || {
                 let mut tarkov_log_watcher = TarkovLogWatcher::new();
                 loop {
