@@ -193,7 +193,7 @@ impl TarkovLogWatcher {
                 info!("eft exit flag is true");
                 self.init_bytes_read();
                 self.eft_exit_flag = false;
-                thread::sleep(time::Duration::from_secs(15));
+                thread::sleep(time::Duration::from_secs(60));
             }
             let latest_log_path = Self::get_latest_log_folder(&self.eft_logs_location)?;
             let (app_log_name, backend_log_name) = Self::get_log_files(latest_log_path.clone())?;
