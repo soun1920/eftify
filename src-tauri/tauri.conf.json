@@ -7,7 +7,7 @@
   },
   "package": {
     "productName": "eftify",
-    "version": "0.0.7"
+    "version": "0.0.8"
   },
   "tauri": {
     "allowlist": {
