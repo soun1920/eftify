@@ -64,7 +64,7 @@ impl TarkovLogWatcher {
             panic!("Failed to get InstallLocation: {:?}", e);
         });
 
-        return path + "\\logs";
+        return path + "\\Logs";
     }
 
     fn get_latest_log_folder(path: &String) -> Result<PathBuf, std::io::Error> {
@@ -104,7 +104,7 @@ impl TarkovLogWatcher {
         }
         let mut latest_log_path = PathBuf::from(path);
         latest_log_path.push(latest_log_folder);
-        return Ok(latest_log_path);
+        Ok(latest_log_path)
     }
     fn get_log_files<P: AsRef<Path>>(path: P) -> Result<(String, String), std::io::Error> {
         let files = fs::read_dir(path)?;
@@ -116,10 +116,10 @@ impl TarkovLogWatcher {
                 Some(name) => name,
                 None => continue,
             };
-            if file_name.contains("application.log") {
+            if file_name.contains("application_000.log") {
                 application_log_name = file_name.to_string()
             }
-            if file_name.contains("backend.log") {
+            if file_name.contains("backend_000.log") {
                 backend_log_name = file_name.to_string()
             }
         }
@@ -168,7 +168,7 @@ impl TarkovLogWatcher {
                         Ok(())
                     }) {
                     Ok(_) => (),
-                    Err(e) => panic!("{}", e),
+                    Err(e) => panic!("err : {}", e),
                 }
             }
         });
